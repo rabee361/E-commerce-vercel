@@ -1,0 +1,89 @@
+{% extends 'base/navbar.html' %}
+{% load static %}
+{% block content %}
+
+        <!-- Checkout Start -->
+        <div class="checkout">
+            <div class="container-fluid"> 
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="checkout-inner">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                            <div class="billing-address">
+                                <h2>Billing Address</h2>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>First Name</label>
+                                        {{form.first_name}}
+                                        <!-- <input class="form-control" type="text" placeholder="First Name"> -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Last Name</label>
+                                        {{form.last_name}}
+                                        <!-- <input class="form-control" type="text" placeholder="Last Name"> -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Mobile No</label>
+                                        {{form.mobile}}
+                                        <!-- <input class="form-control" type="text" placeholder="Mobile No"> -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Address</label>
+                                        {{form.address}}
+                                        <!-- <input class="form-control" type="text" placeholder="Address"> -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Country</label>
+                                        {{form.country}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>City</label>
+                                        {{form.city}}
+                                        <!-- <input class="form-control" type="text" placeholder="City"> -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>State</label>
+                                        {{form.state}}
+                                        <!-- <input class="form-control" type="text" placeholder="State"> -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Payment Method</label>
+                                        {{form.payment}}
+                                        <!-- <input class="form-control" type="text" placeholder="payment"> -->
+                                    </div>
+                                    
+                                </div>
+                                <div class="checkout-payment">
+                                    <div class="checkout-btn">
+                                        <button type="submit">Place Order</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="checkout-inner">
+                            <div class="checkout-summary">
+                                <h1>Cart Total</h1>
+                                {% for item in cart_items %}
+                                <p>{{item.products.name}} x {{item.quantity}}<span>${{item.total}}</span></p>
+                                {% endfor %}
+                                <p>Sub Total<span>${{sub_total}}</span></p>
+                                <p>Shipping Cost<span>$20</span></p>
+                                <h2>Grand Total<span>${{grand_total}}</span></h2>
+                            </div>
+                        </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Checkout End -->
+
+
+{% endblock %}

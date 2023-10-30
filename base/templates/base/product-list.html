@@ -1,0 +1,198 @@
+{% extends 'base/navbar.html' %}
+{% load static %}
+{% block content %}
+     
+
+        <!-- Product List Start -->
+        <div class="product-view">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="product-view-top">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="product-search">
+                                                <form method="get">
+                                                    <input name="q" type="text" placeholder="Search">
+                                                    <button><i class="fa fa-search"></i></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="product-short">
+                                                <div class="dropdown">
+                                                    <div class="dropdown-toggle" data-toggle="dropdown">Product short by</div>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a href="#" class="dropdown-item">Newest</a>
+                                                        <a href="#" class="dropdown-item">Popular</a>
+                                                        <a href="#" class="dropdown-item">Most sale</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-md-4">
+                                            <div class="product-price-range">
+                                                <div class="dropdown">
+                                                    <form method="get" action="{% url 'product-list' 1 %}">
+                                                        <select> 
+                                                            <option value="8">8</option>
+                                                            <option value="9">$101 to $150</option>
+                                                            <option value="10">$151 to $200</option>
+                                                            <option value="11">$201 to $250</option>
+                                                            <option value="13">$251 to $300</option>
+                                                            <option value="14">$301 to $350</option>
+                                                            <option value="15">$351 to $400</option>
+                                                            <option value="16">$401 to $450</option>
+                                                            <option value="17">$451 to $500</option>
+                                                        </select>
+                                                        <input type="submit" value="Filter" class="btn btn-primary">
+                                                        </form>
+                                                </div>
+                                            </div>
+
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            {% for product in products %}
+                            <div class="col-md-4">
+                                <div class="product-item">
+                                    <div class="product-title">
+                                        <a href="#">{{product.name}}</a>
+                                        <div class="ratting">
+                                        {% if product.stars %}
+                                            {% for i in "x"|rjust:product.stars %}
+                                            <i class="fa fa-star"></i>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+                                        <a href="{% url 'product-detail' product.id %}">
+                                            <img src="{{product.images.all.first}}" alt="Product Image">
+                                        </a>
+                                        <div class="product-action">
+                                            <a href="{% url 'add-to-cart' product.id %}"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="{% url 'add-to-wishes' product.id %}"><i class="fa fa-heart"></i></a>
+                                            <a href="{% url 'product-detail' product.id %}"><i class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>{{product.price|floatformat:2}}</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                        
+                        <!-- Pagination Start -->
+
+                        <div class="col-md-12">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+
+                                    {% if products.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{% if products.has_previous %} {% url 'product-list' products.previous_page_number %}{% endif %} "><< Previous</a>
+                                    </li>
+                                    {% endif %}
+                            
+                                    {% if products.number|add:'-1' > 1 %}
+                                        <li class="page-item"><a class="page-link">&hellip;</a></li>
+                                    {% endif %}
+                            
+                                    {% for i in products.paginator.page_range %}
+                                        {% if products.number == i %}
+                                            <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                                        {% elif i > products.number|add:'-3' and i < products.number|add:'3' %}
+                                            <li class="page-item"><a class="page-link" href="{% url 'product-list' i %}">{{ i }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                            
+                                    {% if products.paginator.num_pages > users.number|add:'1' %}
+                                        <li class="page-item disabled"><a class="page-link" href="#">&hellip;</a></li>
+                                    {% endif %}
+
+                                    {% if products.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{% if products.has_next %} {% url 'product-list' products.next_page_number %} {% endif %}">Next >></a>
+                                    </li>
+                                    {% endif %}
+
+                        </ul>
+                        </nav>
+                        </div>
+                        <!-- Pagination End -->
+                    </div>           
+                    
+                    <!-- Side Bar Start -->
+                    <div class="col-lg-4 sidebar">
+                        <div class="sidebar-widget category">
+                            <h2 class="title">Category</h2>
+                            <nav class="navbar bg-light">
+                                <ul class="navbar-nav">
+                                    {% for category in categories %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'product-list' 1 %}?q={{category.category}}"><i class="fa fa-female"></i>{{category}}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </nav>
+                        </div>
+                        
+
+                        
+                        <div class="sidebar-widget brands">
+                            <h2 class="title">Our Brands</h2>
+                            <ul>
+                                <li><a href="#">Nulla </a><span>(45)</span></li>
+                                <li><a href="#">Curabitur </a><span>(34)</span></li>
+                                <li><a href="#">Nunc </a><span>(67)</span></li>
+                                <li><a href="#">Ullamcorper</a><span>(74)</span></li>
+                                <li><a href="#">Fusce </a><span>(89)</span></li>
+                                <li><a href="#">Sagittis</a><span>(28)</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="sidebar-widget tag">
+                            <h2 class="title">Tags Cloud</h2>
+                            <a href="#">Lorem ipsum</a>
+                            <a href="#">Vivamus</a>
+                            <a href="#">Phasellus</a>
+                            <a href="#">pulvinar</a>
+                            <a href="#">Curabitur</a>
+                            <a href="#">Fusce</a>
+                            <a href="#">Sem quis</a>
+                            <a href="#">Mollis metus</a>
+                            <a href="#">Sit amet</a>
+                            <a href="#">Vel posuere</a>
+                            <a href="#">orci luctus</a>
+                            <a href="#">Nam lorem</a>
+                        </div>
+                    </div>
+                    <!-- Side Bar End -->
+                </div>
+            </div>
+        </div>
+        <!-- Product List End -->  
+        
+        <!-- Brand Start -->
+        <div class="brand">
+            <div class="container-fluid">
+                <div class="brand-slider">
+                    <div class="brand-item"><img src="img/brand-1.png" alt=""></div>
+                    <div class="brand-item"><img src="img/brand-2.png" alt=""></div>
+                    <div class="brand-item"><img src="img/brand-3.png" alt=""></div>
+                    <div class="brand-item"><img src="img/brand-4.png" alt=""></div>
+                    <div class="brand-item"><img src="img/brand-5.png" alt=""></div>
+                    <div class="brand-item"><img src="img/brand-6.png" alt=""></div>
+                </div>
+            </div>
+        </div>
+        <!-- Brand End -->
+        
+ {% endblock %}
